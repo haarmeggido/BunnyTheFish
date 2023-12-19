@@ -1,0 +1,28 @@
+Role:
+	Opiekun
+	Zarząd
+	
+	_Rapid
+	Rapidziątko
+
+	@Prusa
+	SLA
+	
+piony
+	Pion Kreatywny
+	Pion Mechatroniczny
+
+	Pion Dokumentacyjny
+	Pion Informatyczny
+role
+	Dreamer
+	Closer
+	Artist
+	Hacker
+	Fixer
+
+	Koordynator
+
+Misc 	
+	!WG
+	!AD
