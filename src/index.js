@@ -1,5 +1,5 @@
 require('dotenv').config();
-const {Client, IntentsBitField} = require('discord.js');
+const {Client, IntentsBitField, EmbedBuilder} = require('discord.js');
 
 const client = new Client({
   intents: [
@@ -34,7 +34,47 @@ client.on('interactionCreate', (interaction) => {
   if (interaction.commandName === 'swim') {
     interaction.reply('swim!');
   }
-
+  if (interaction.commandName === 'add') {
+    const firstNumber = interaction.options.getNumber('first-number');
+    const secondNumber = interaction.options.getNumber('second-number');
+    interaction.reply(`The sum is ${firstNumber + secondNumber}`);
+  }
+  if (interaction.commandName === 'embed') {
+    const embed = new EmbedBuilder()
+      .setTitle('This is an embed')
+      .setDescription('This is the description')
+      .setColor('Red')
+      .addFields({
+        name: 'Field 1', value: 'Value 1', inline: true
+      }, {
+        name: 'Field 2', value: 'Value 2', inline: true
+      });
+      
+      interaction.reply({embeds: [embed]});
+  }
 })
 
+client.on('interactionCreate', async (interaction) => {
+  if (interaction.isButton()) { //so absolutely to change
+    try {
+      await interaction.deferReply( {ephemeral: true});
+      const role = interaction.guild.roles.cache.get(interaction.customId);
+      if (!role) {
+        interaction.editReply({content: 'Role not found', ephemeral: true});
+        return;
+      }
+      const hasRole = interaction.member.roles.cache.has(role.id);
+      if (hasRole) {
+        await interaction.member.roles.remove(role);
+        interaction.editReply({content: `Role ${role.name} removed`, ephemeral: true});
+        return;
+      }
+      await interaction.member.roles.add(role);
+      interaction.editReply({content: `Role ${role.name} added`, ephemeral: true});
+      return;   
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
 client.login(process.env.TOKEN);
